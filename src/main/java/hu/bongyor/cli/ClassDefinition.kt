@@ -35,13 +35,28 @@ class ClassDefinition(
     }
 
     fun execute(executeCommand: ExecuteCommand) {
+        executeCommand.paramSetCommands.forEach { paramSetCommand ->
+            params
+                .first {
+                    paramSetCommand.fieldName != null &&
+                            it.name == paramSetCommand.fieldName ||
+                            paramSetCommand.fieldShortcut != null &&
+                            it.annotation.shortcut == paramSetCommand.fieldShortcut
+                }
+                .setValue(targetInstance, paramSetCommand.value)
+        }
+        val runnableFunction = getExecutableFunction(executeCommand)
+        runnableFunction.execute(targetInstance)
+    }
+
+    private fun getExecutableFunction(executeCommand: ExecuteCommand): FunctionDefinition {
         val runnableFunction = when (executeCommand.functionNameOrShortcut) {
             null -> functions.first { it.annotation.defaultRun }
             else -> functions.first {
                 it.name == executeCommand.functionNameOrShortcut ||
-                it.annotation.shortcut == executeCommand.functionNameOrShortcut
+                        it.annotation.shortcut == executeCommand.functionNameOrShortcut
             }
         }
-        runnableFunction.execute(targetInstance)
+        return runnableFunction
     }
 }
