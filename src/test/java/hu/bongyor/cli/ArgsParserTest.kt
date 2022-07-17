@@ -27,98 +27,98 @@ internal class ArgsParserTest {
     private fun createParser(argsString: String) = ArgsParser(args = argsString.split(" ").toTypedArray())
 
     @Nested
-    inner class ExecuteRequestTests {
+    inner class ExecuteCommandTests {
 
         @Test
         fun `Empty string`() {
-            val executeRequest = createParser("").executeRequest
+            val executeRequest = createParser("").executeCommand
             assertThat(executeRequest.classNameOrShortcut).isNull()
             assertThat(executeRequest.functionNameOrShortcut).isNull()
-            assertThat(executeRequest.paramSetRequests).isEmpty()
+            assertThat(executeRequest.paramSetCommands).isEmpty()
         }
 
         @Test
         fun `Only class`() {
-            val executeRequest = createParser("ClassName").executeRequest
+            val executeRequest = createParser("ClassName").executeCommand
             assertThat(executeRequest.classNameOrShortcut).isEqualTo("ClassName")
             assertThat(executeRequest.functionNameOrShortcut).isNull()
-            assertThat(executeRequest.paramSetRequests).isEmpty()
+            assertThat(executeRequest.paramSetCommands).isEmpty()
         }
 
         @Test
         fun `Only function`() {
-            val executeRequest = createParser(".functionName").executeRequest
+            val executeRequest = createParser(".functionName").executeCommand
             assertThat(executeRequest.classNameOrShortcut).isNull()
             assertThat(executeRequest.functionNameOrShortcut).isEqualTo("functionName")
-            assertThat(executeRequest.paramSetRequests).isEmpty()
+            assertThat(executeRequest.paramSetCommands).isEmpty()
         }
 
         @Test
         fun `Class and function`() {
-            val executeRequest = createParser("ClassName.functionName").executeRequest
+            val executeRequest = createParser("ClassName.functionName").executeCommand
             assertThat(executeRequest.classNameOrShortcut).isEqualTo("ClassName")
             assertThat(executeRequest.functionNameOrShortcut).isEqualTo("functionName")
-            assertThat(executeRequest.paramSetRequests).isEmpty()
+            assertThat(executeRequest.paramSetCommands).isEmpty()
         }
 
         @Nested
         inner class ParamTests {
             @Test
             internal fun `Just one param`() {
-                val executeRequest = createParser("--fieldName value").executeRequest
+                val executeRequest = createParser("--fieldName value").executeCommand
                 assertThat(executeRequest.classNameOrShortcut).isNull()
                 assertThat(executeRequest.functionNameOrShortcut).isNull()
-                assertThat(executeRequest.paramSetRequests)
+                assertThat(executeRequest.paramSetCommands)
                     .containsExactly(
-                        ParamSetRequest(fieldShortcut = null, fieldName = "fieldName", value = "value")
+                        ParamSetCommand(fieldShortcut = null, fieldName = "fieldName", value = "value")
                     )
             }
 
             @Test
             internal fun `One param and one shortcut`() {
-                val executeRequest = createParser("--fieldName value -shortcut svalue").executeRequest
+                val executeRequest = createParser("--fieldName value -shortcut svalue").executeCommand
                 assertThat(executeRequest.classNameOrShortcut).isNull()
                 assertThat(executeRequest.functionNameOrShortcut).isNull()
-                assertThat(executeRequest.paramSetRequests)
+                assertThat(executeRequest.paramSetCommands)
                     .containsExactly(
-                        ParamSetRequest(fieldShortcut = null, fieldName = "fieldName", value = "value"),
-                        ParamSetRequest(fieldShortcut = "shortcut", fieldName = null, value = "svalue"),
+                        ParamSetCommand(fieldShortcut = null, fieldName = "fieldName", value = "value"),
+                        ParamSetCommand(fieldShortcut = "shortcut", fieldName = null, value = "svalue"),
                     )
             }
 
             @Test
             internal fun `One param whitout value and one shortcut`() {
-                val executeRequest = createParser("--fieldName -shortcut svalue").executeRequest
+                val executeRequest = createParser("--fieldName -shortcut svalue").executeCommand
                 assertThat(executeRequest.classNameOrShortcut).isNull()
                 assertThat(executeRequest.functionNameOrShortcut).isNull()
-                assertThat(executeRequest.paramSetRequests)
+                assertThat(executeRequest.paramSetCommands)
                     .containsExactly(
-                        ParamSetRequest(fieldShortcut = null, fieldName = "fieldName", value = null),
-                        ParamSetRequest(fieldShortcut = "shortcut", fieldName = null, value = "svalue"),
+                        ParamSetCommand(fieldShortcut = null, fieldName = "fieldName", value = null),
+                        ParamSetCommand(fieldShortcut = "shortcut", fieldName = null, value = "svalue"),
                     )
             }
 
             @Test
             internal fun `One param and one shortcut whitout value`() {
-                val executeRequest = createParser("--fieldName value -shortcut").executeRequest
+                val executeRequest = createParser("--fieldName value -shortcut").executeCommand
                 assertThat(executeRequest.classNameOrShortcut).isNull()
                 assertThat(executeRequest.functionNameOrShortcut).isNull()
-                assertThat(executeRequest.paramSetRequests)
+                assertThat(executeRequest.paramSetCommands)
                     .containsExactly(
-                        ParamSetRequest(fieldShortcut = null, fieldName = "fieldName", value = "value"),
-                        ParamSetRequest(fieldShortcut = "shortcut", fieldName = null, value = null),
+                        ParamSetCommand(fieldShortcut = null, fieldName = "fieldName", value = "value"),
+                        ParamSetCommand(fieldShortcut = "shortcut", fieldName = null, value = null),
                     )
             }
 
             @Test
             internal fun `Class, function and one param and one shortcut whitout value`() {
-                val executeRequest = createParser("ClassName.functionName --fieldName value -shortcut").executeRequest
+                val executeRequest = createParser("ClassName.functionName --fieldName value -shortcut").executeCommand
                 assertThat(executeRequest.classNameOrShortcut).isEqualTo("ClassName")
                 assertThat(executeRequest.functionNameOrShortcut).isEqualTo("functionName")
-                assertThat(executeRequest.paramSetRequests)
+                assertThat(executeRequest.paramSetCommands)
                     .containsExactly(
-                        ParamSetRequest(fieldShortcut = null, fieldName = "fieldName", value = "value"),
-                        ParamSetRequest(fieldShortcut = "shortcut", fieldName = null, value = null),
+                        ParamSetCommand(fieldShortcut = null, fieldName = "fieldName", value = "value"),
+                        ParamSetCommand(fieldShortcut = "shortcut", fieldName = null, value = null),
                     )
             }
         }

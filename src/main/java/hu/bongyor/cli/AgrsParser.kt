@@ -1,22 +1,10 @@
 package hu.bongyor.cli
 
-data class ParamSetRequest(
-    val fieldShortcut: String?,
-    val fieldName: String?,
-    val value: String?,
-)
-
-data class ExecuteRequest(
-    val classNameOrShortcut: String?,
-    val functionNameOrShortcut: String?,
-    val paramSetRequests: List<ParamSetRequest>
-)
-
 class ArgsParser(
     private val args: Array<String>
 ) {
     val isHelpRequest: Boolean get() = args.size == 1 && helpPattern.matches(args[0])
-    val executeRequest: ExecuteRequest get() = ExecuteRequestBuilder(args.toList()).build()
+    val executeCommand: ExecuteCommand get() = ExecuteRequestBuilder(args.toList()).build()
     companion object {
         private val helpPattern = Regex("^(\\?)|(-\\?)|(h)|(-h)|(help)|(-help)|(--help)$")
     }
@@ -27,16 +15,16 @@ class ExecuteRequestBuilder(private val args: List<String>) {
     private var functionNameOrShortcut: String? = null
     private var firstArgIsClassOrFunction = false
 
-    fun build(): ExecuteRequest {
+    fun build(): ExecuteCommand {
         init()
         val paramArgs = when (firstArgIsClassOrFunction) {
             true -> args.drop(1)
             false -> args
         }
-        return ExecuteRequest(
+        return ExecuteCommand(
             classNameOrShortcut = classNameOrShortcut,
             functionNameOrShortcut = functionNameOrShortcut,
-            paramSetRequests = ExecuteRequestParamBuilder(paramArgs).build()
+            paramSetCommands = ExecuteRequestParamBuilder(paramArgs).build()
         )
     }
 
@@ -60,7 +48,7 @@ class ExecuteRequestParamBuilder(private val args: List<String>) {
     private var name: String? = null
     private var value: String? = null
 
-    fun build(): List<ParamSetRequest> {
+    fun build(): List<ParamSetCommand> {
         if (args.isEmpty()) {
             return listOf()
         }
@@ -68,16 +56,16 @@ class ExecuteRequestParamBuilder(private val args: List<String>) {
         fillShortcut()
         fillName()
         fillValue()
-        val paramSetRequest = ParamSetRequest(
+        val paramSetCommand = ParamSetCommand(
             fieldName = name,
             fieldShortcut = shortcut,
             value = value,
         )
-        return listOf(paramSetRequest) + getOtherParamSetRequests()
+        return listOf(paramSetCommand) + getOtherParamSetRequests()
     }
 
-    private fun getOtherParamSetRequests(): List<ParamSetRequest> {
-        var otherParams: List<ParamSetRequest> = listOf()
+    private fun getOtherParamSetRequests(): List<ParamSetCommand> {
+        var otherParams: List<ParamSetCommand> = listOf()
         if (args.size > drop) {
             otherParams = ExecuteRequestParamBuilder(args.drop(drop)).build()
         }

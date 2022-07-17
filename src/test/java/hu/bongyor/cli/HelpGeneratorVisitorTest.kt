@@ -193,7 +193,10 @@ internal class HelpGeneratorVisitorTest {
                 private var parameterName = 1
             }
 
-            val definition = FieldDefinition(targetField = X::class.java.getDeclaredField("parameterName"))
+            val definition = FieldDefinition(
+                targetField = X::class.java.getDeclaredField("parameterName"),
+                targetInstance = X()
+            )
             definition.accept(helpGeneratorVisitor)
             assertThat(helpGeneratorVisitor.help)
                 .isEqualTo(
@@ -216,7 +219,10 @@ internal class HelpGeneratorVisitorTest {
                 private var parameterName: Int? = null
             }
 
-            val definition = FieldDefinition(targetField = X::class.java.getDeclaredField("parameterName"))
+            val definition = FieldDefinition(
+                targetField = X::class.java.getDeclaredField("parameterName"),
+                targetInstance = X()
+            )
             definition.accept(helpGeneratorVisitor)
             assertThat(helpGeneratorVisitor.help)
                 .isEqualTo(
@@ -239,7 +245,10 @@ internal class HelpGeneratorVisitorTest {
                 private var parameterName: String = "defaultValue"
             }
 
-            val definition = FieldDefinition(targetField = X::class.java.getDeclaredField("parameterName"))
+            val definition = FieldDefinition(
+                targetField = X::class.java.getDeclaredField("parameterName"),
+                targetInstance = X()
+            )
             definition.accept(helpGeneratorVisitor)
             assertThat(helpGeneratorVisitor.help)
                 .isEqualTo(
@@ -262,7 +271,10 @@ internal class HelpGeneratorVisitorTest {
                 private var parameterName: TestEnum = TestEnum.VALUE1
             }
 
-            val definition = FieldDefinition(targetField = X::class.java.getDeclaredField("parameterName"))
+            val definition = FieldDefinition(
+                targetField = X::class.java.getDeclaredField("parameterName"),
+                targetInstance = X()
+            )
             definition.accept(helpGeneratorVisitor)
             assertThat(helpGeneratorVisitor.help)
                 .isEqualTo(

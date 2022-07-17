@@ -11,4 +11,15 @@ class ApplicationDefinition(
             .forEach { it.accept(visitor) }
     }
 
+    fun execute(executeCommand: ExecuteCommand) {
+        val runnableClass = when (executeCommand.classNameOrShortcut) {
+            null -> classes.first { it.annotation.defaultRun }
+            else -> classes.first {
+                it.className == executeCommand.classNameOrShortcut ||
+                        it.annotation.shortcut == executeCommand.classNameOrShortcut
+            }
+        }
+        runnableClass.execute(executeCommand)
+    }
+
 }

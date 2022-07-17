@@ -12,4 +12,8 @@ class FunctionDefinition(
         visitor.visit(this)
     }
 
+    fun execute(targetInstance: Any) {
+        targetMethod.invoke(targetInstance)
+    }
+
 }
