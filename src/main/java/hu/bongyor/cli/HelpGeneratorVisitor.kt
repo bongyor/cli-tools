@@ -1,5 +1,7 @@
 package hu.bongyor.cli
 
+import hu.bongyor.cli.theme.ConsoleTheme
+
 class HelpGeneratorVisitor(
     private val consoleTheme: ConsoleTheme
 ) : Visitor {

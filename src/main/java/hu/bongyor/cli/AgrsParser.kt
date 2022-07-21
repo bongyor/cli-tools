@@ -29,11 +29,13 @@ class ExecuteRequestBuilder(private val args: List<String>) {
     }
 
     private fun init() {
-        val classAndFunctionMatch = classAndFunctionPattern.matchEntire(args[0])
-        if (classAndFunctionMatch != null) {
-            firstArgIsClassOrFunction = true
-            classNameOrShortcut = classAndFunctionMatch.groups["class"]?.value
-            functionNameOrShortcut = classAndFunctionMatch.groups["function"]?.value
+        if (args.isNotEmpty()) {
+            val classAndFunctionMatch = classAndFunctionPattern.matchEntire(args[0])
+            if (classAndFunctionMatch != null) {
+                firstArgIsClassOrFunction = true
+                classNameOrShortcut = classAndFunctionMatch.groups["class"]?.value
+                functionNameOrShortcut = classAndFunctionMatch.groups["function"]?.value
+            }
         }
     }
 

@@ -28,6 +28,13 @@ internal class ArgsParserTest {
 
     @Nested
     inner class ExecuteCommandTests {
+        @Test
+        internal fun `Empty args`() {
+            val executeRequest = ArgsParser(args = arrayOf()).executeCommand
+            assertThat(executeRequest.classNameOrShortcut).isNull()
+            assertThat(executeRequest.functionNameOrShortcut).isNull()
+            assertThat(executeRequest.paramSetCommands).isEmpty()
+        }
 
         @Test
         fun `Empty string`() {
