@@ -6,7 +6,7 @@
     <repositories>
         <repository>
             <id>github-bongyor-cli-tools</id>
-            <url>https://raw.github.com/bongyor/cli-tools</url>
+            <url>https://maven.pkg.github.com/bongyor/cli-tools</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
